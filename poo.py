@@ -12,7 +12,7 @@ class ContaTiss:
     ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
     def __init__(self):
-        caminhoGuia = r"C:\Users\eliasp\Downloads\00000000000000007445_07804280A33DC45B1B7AFACD6C22AEE4.xml"
+        caminhoGuia = r"00000000000000011306_92a0e8826a52304e3ac85dfe30c83f38.xml"
         self.corpoGuia = Et.parse(caminhoGuia, parser=Et.XMLParser(encoding="ISO-8859-1")).getroot()
         self.guias = self.corpoGuia.iter('{http://www.ans.gov.br/padroes/tiss/schemas}guiasTISS')
 
@@ -82,13 +82,13 @@ class Guia:
     def setListaDespesa(self):
         if Et.iselement(self.getOutrasDespesas()):
             self.dadosDespesa = list(self.getOutrasDespesas().iterfind(
-                f'.//ans:servicosExecutados[ans:codigoProcedimento="{codigoDespesa}"]..', guia.ans_prefix))
+                f'.//ans:servicosExecutados[ans:codigoProcedimento="{codigoDespesa}"]..', self.ans_prefix))
 
     def getListaDespesa(self):
         return self.dadosDespesa
 
     def alteraValorTotalGeral(self, diferenca):
-        valoresTotais = sse.getGuia().find('ans:valorTotal', self.ans_prefix)
+        valoresTotais = self.getGuia().find('ans:valorTotal', self.ans_prefix)
         valorTotalGeral = valoresTotais.find('ans:valorTotalGeral', self.ans_prefix)
 
         for valorTotal in valoresTotais:
@@ -142,7 +142,7 @@ class Procedimento(Guia):
             print(f"Valor unitario alterado para {valorUnitario.text}")
             print(f"Valor total alterado para {valorTotal.text}")
 
-            super().alteraValorTotalGeral(diferenca)
+            guia.alteraValorTotalGeral(diferenca)
 
 
 conta = ContaTiss()
@@ -152,15 +152,15 @@ for item in conta.guias.__next__():
     print('----------- ' + guia.getNumeroGuia() + ' -----------')
     if Et.iselement(guia.getProcedimentosExecutados()):
         for procedimento in guia.getListaProcedimento():
-            procedimento = Procedimento(procedimento)
-            procedimento.alteraCodigoProcedimento(procedimento)
-            procedimento.alteraValorUnitario(procedimento)
+            p = Procedimento(procedimento)
+            p.alteraCodigoProcedimento(procedimento)
+            p.alteraValorUnitario(procedimento)
 
     if Et.iselement(guia.getOutrasDespesas()):
         for procedimento in guia.getListaDespesa():
-            procedimento = Procedimento()
-            procedimento.alteraCodigoProcedimento(procedimento)
-            procedimento.alteraValorUnitario(procedimento)
+            p = Procedimento(procedimento)
+            p.alteraCodigoProcedimento(procedimento)
+            p.alteraValorUnitario(procedimento)
 
 
     else:
