@@ -7,7 +7,6 @@ codigoDespesa = '90289870'
 
 
 class ContaTiss:
-    tipoGuia: str
     corpoGuia: Et.Element
     guias: typing.Generator
     ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
@@ -16,12 +15,6 @@ class ContaTiss:
         caminhoGuia = r"00000000000000011306_92a0e8826a52304e3ac85dfe30c83f38.xml"
         self.corpoGuia = Et.parse(caminhoGuia, parser=Et.XMLParser(encoding="ISO-8859-1")).getroot()
         self.guias = self.corpoGuia.find('.//ans:guiasTISS', self.ans_prefix)
-
-    def setTipoGuia(self, tipo: str):
-        self.tipoGuia = tipo
-
-    def getTipoGuia(self):
-        return self.tipoGuia
 
     def setCorpoGuia(self, corpo):
         self.setCorpoGuia(corpo)
@@ -118,7 +111,7 @@ class Procedimento(Guia):
     def alteraCodigoProcedimento(self, guia):
         if len(guia.getListaProcedimento()) > 0:
             codigo = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento', guia.ans_prefix)
-            codigo.text = novoCodProc
+            codigo.text = '0000'
             print("Codigo de procedimento alterado!")
 
         elif len(guia.getListaDespesa()) > 0:
