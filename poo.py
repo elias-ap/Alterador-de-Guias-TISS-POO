@@ -98,9 +98,11 @@ class Guia:
 
 class Procedimento:
     procedimento: Et.ElementTree
+    guia: Guia
 
-    def __init__(self, procedimento):
+    def __init__(self, procedimento, guia):
         self.setProcedimento(procedimento)
+        self.guia = guia
 
     def setProcedimento(self, procedimento):
         self.procedimento = procedimento
@@ -108,22 +110,24 @@ class Procedimento:
     def getProcedimento(self):
         return self.procedimento
 
-    def alteraCodigoProcedimento(self, guia):
-        if len(guia.getListaProcedimento()) > 0:
-            codigo = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento', guia.ans_prefix)
-            codigo.text = '0000'
-            print("Codigo de procedimento alterado!")
+    def alteraCodigoProcedimento(self, codProc, novoCodProc):
+        if len(self.guia.getListaProcedimento()) > 0:
+            codigo = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento', self.guia.ans_prefix)
+            if codigo.text == codProc and novoCodProc != '':
+                codigo.text = novoCodProc
+                print(f"Codigo de procedimento alterado de {codProc} para {novoCodProc}")
 
-        elif len(guia.getListaDespesa()) > 0:
-            codigo = self.getProcedimento().find('.//ans:codigoProcedimento', guia.ans_prefix)
-            codigo.text = '00004'
-            print("Codigo de procedimento alterado!")
+        elif len(self.guia.getListaDespesa()) > 0:
+            codigo = self.getProcedimento().find('.//ans:codigoProcedimento', self.guia.ans_prefix)
+            if codigo.text == codProc and novoCodProc != '':
+                codigo.text = novoCodProc
+                print(f"Codigo de procedimento alterado de {codProc} para {novoCodProc}")
 
-    def alteraValorUnitario(self, guia):
+    def alteraValorUnitario(self):
         novoValorUnitario = 10
-        valorUnitario = self.getProcedimento().find('.//ans:valorUnitario', guia.ans_prefix)
-        quantidadeExecutada = float(self.getProcedimento().find('.//ans:quantidadeExecutada', guia.ans_prefix).text)
-        valorTotal = self.getProcedimento().find('.//ans:valorTotal', guia.ans_prefix)
+        valorUnitario = self.getProcedimento().find('.//ans:valorUnitario', self.guia.ans_prefix)
+        quantidadeExecutada = float(self.getProcedimento().find('.//ans:quantidadeExecutada', self.guia.ans_prefix).text)
+        valorTotal = self.getProcedimento().find('.//ans:valorTotal', self.guia.ans_prefix)
         if float(valorUnitario.text) != novoValorUnitario:
             novoValorTotal = float(novoValorUnitario * quantidadeExecutada)
             if float(valorTotal.text) > novoValorTotal:
@@ -137,14 +141,14 @@ class Procedimento:
             print(f"Valor unitario alterado para {valorUnitario.text}")
             print(f"Valor total alterado para {valorTotal.text}")
 
-            guia.alteraValorTotalGeral(diferenca)
+            self.guia.alteraValorTotalGeral(diferenca)
 
-    def alteraCodigoTabela(self, guia):
-        codigoTabela = self.getProcedimento().find('.//ans:codigoTabela', guia.ans_prefix)
+    def alteraCodigoTabela(self):
+        codigoTabela = self.getProcedimento().find('.//ans:codigoTabela', self.guia.ans_prefix)
         codigoTabela.text = '050'
         print('Código de tabela alterado para: ' + codigoTabela.text)
 
-    def alteraGrauParticipacao(self, guia):
-        grauParticipacao = self.getProcedimento().find('.//ans:grauPart', guia.ans_prefix)
+    def alteraGrauParticipacao(self):
+        grauParticipacao = self.getProcedimento().find('.//ans:grauPart', self.guia.ans_prefix)
         grauParticipacao.text = '20'
         print('Grau de participação alterado para: ' + grauParticipacao.text)

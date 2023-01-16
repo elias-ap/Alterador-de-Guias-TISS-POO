@@ -25,18 +25,18 @@ for linha in tabelaDeCriticas.values:
         print('----------- ' + guia.getNumeroGuia() + ' -----------')
         if Et.iselement(guia.getProcedimentosExecutados()):
             for procedimento in guia.getListaProcedimento():
-                p = Procedimento(procedimento)
-                p.alteraCodigoProcedimento(guia)
-                p.alteraGrauParticipacao(guia)
-                p.alteraCodigoTabela(guia)
-                p.alteraValorUnitario(guia)
+                p = Procedimento(procedimento, guia)
+                p.alteraCodigoProcedimento(codProc, novoCodProc)
+                p.alteraGrauParticipacao()
+                p.alteraCodigoTabela()
+                p.alteraValorUnitario()
 
         if Et.iselement(guia.getOutrasDespesas()):
             for procedimento in guia.getListaDespesa():
-                p = Procedimento(procedimento)
-                p.alteraCodigoProcedimento(guia)
-                p.alteraCodigoTabela(guia)
-                p.alteraValorUnitario(guia)
+                p = Procedimento(procedimento, guia)
+                p.alteraCodigoProcedimento(codProc, novoCodProc)
+                p.alteraCodigoTabela()
+                p.alteraValorUnitario()
 
         else:
             print('nao existe outras despesas nessa conta')
