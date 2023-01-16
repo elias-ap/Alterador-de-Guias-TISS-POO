@@ -27,12 +27,15 @@ for linha in tabelaDeCriticas.values:
             for procedimento in guia.getListaProcedimento():
                 p = Procedimento(procedimento)
                 p.alteraCodigoProcedimento(guia)
+                p.alteraGrauParticipacao(guia)
+                p.alteraCodigoTabela(guia)
                 p.alteraValorUnitario(guia)
 
         if Et.iselement(guia.getOutrasDespesas()):
             for procedimento in guia.getListaDespesa():
                 p = Procedimento(procedimento)
                 p.alteraCodigoProcedimento(guia)
+                p.alteraCodigoTabela(guia)
                 p.alteraValorUnitario(guia)
 
         else:

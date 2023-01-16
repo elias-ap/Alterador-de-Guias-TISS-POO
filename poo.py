@@ -92,11 +92,11 @@ class Guia:
                 valorTotalGeral.text = '%.2f' % (float(valorTotalGeral.text) - diferenca)
                 break
 
-        print(f"\n-----Valores totais-----\n\nValor total alterado para {valorTotal.text}")
+        print(f"\n----- Valores totais -----\n\nValor total alterado para {valorTotal.text}")
         print(f"Valor total geral alterado para {valorTotalGeral.text}\n")
 
 
-class Procedimento(Guia):
+class Procedimento:
     procedimento: Et.ElementTree
 
     def __init__(self, procedimento):
@@ -139,9 +139,12 @@ class Procedimento(Guia):
 
             guia.alteraValorTotalGeral(diferenca)
 
-    def imprimeDadosDespesa(self, guia):
-        codigo = self.procedimento.find('.//ans:codigoProcedimento', guia.ans_prefix)
-        valorUnitario = self.procedimento.find('.//ans:valorUnitario', guia.ans_prefix)
+    def alteraCodigoTabela(self, guia):
+        codigoTabela = self.getProcedimento().find('.//ans:codigoTabela', guia.ans_prefix)
+        codigoTabela.text = '050'
+        print('Código de tabela alterado para: ' + codigoTabela.text)
 
-        print(codigo.text, '\n', valorUnitario.text)
-
+    def alteraGrauParticipacao(self, guia):
+        grauParticipacao = self.getProcedimento().find('.//ans:grauPart', guia.ans_prefix)
+        grauParticipacao.text = '20'
+        print('Grau de participação alterado para: ' + grauParticipacao.text)
