@@ -1,6 +1,6 @@
 import typing
 import xml.etree.ElementTree as Et
-
+from pandas import read_excel, DataFrame
 
 codigoProcedimento = '41101014'
 codigoDespesa = '90289870'
@@ -126,7 +126,8 @@ class Procedimento:
     def alteraValorUnitario(self):
         novoValorUnitario = 10
         valorUnitario = self.getProcedimento().find('.//ans:valorUnitario', self.guia.ans_prefix)
-        quantidadeExecutada = float(self.getProcedimento().find('.//ans:quantidadeExecutada', self.guia.ans_prefix).text)
+        quantidadeExecutada = float(
+            self.getProcedimento().find('.//ans:quantidadeExecutada', self.guia.ans_prefix).text)
         valorTotal = self.getProcedimento().find('.//ans:valorTotal', self.guia.ans_prefix)
         if float(valorUnitario.text) != novoValorUnitario:
             novoValorTotal = float(novoValorUnitario * quantidadeExecutada)
@@ -152,3 +153,48 @@ class Procedimento:
         grauParticipacao = self.getProcedimento().find('.//ans:grauPart', self.guia.ans_prefix)
         grauParticipacao.text = '20'
         print('Grau de participação alterado para: ' + grauParticipacao.text)
+
+    def alteraCodigoDespesa(self):
+        codigoDespesa = self.getProcedimento().find('.//ans:codigoDespesa', self.guia.ans_prefix)
+        codigoDespesa.text = '06'
+        print('Código de despesa alterado para: ' + codigoDespesa.text)
+
+    def alteraUnidadeMedida(self):
+        unidadeMedida = self.getProcedimento().find('.//ans:unidadeMedida', self.guia.ans_prefix)
+        unidadeMedida.text = '06'
+        print('Unidade de medida alterado para: ' + unidadeMedida.text)
+
+
+class TabelaDeCritica:
+    tabelaDados: DataFrame
+    tabelaValores: DataFrame
+
+    def __init__(self):
+        self.tabelaDados = read_excel("Planilha de Críticas.xlsx", sheet_name='Dados', dtype=str, keep_default_na=False)
+        self.tabelaDados = read_excel("Planilha de Críticas.xlsx", sheet_name='Dados', dtype=str, keep_default_na=False)
+
+    def getTabelaDados(self):
+        return self.tabelaDados.values
+
+    def getTabelaValores(self):
+        return self.tabelaValores.values
+
+
+def setLinhaAlteracaoDeDados(linha):
+    nonlocal numGuia, codProc, novoCodProc, codTabela, novoCodTabela, grauP, novoGrauP, codDespesa, novoCodDespesa,\
+        unidadeMedida, novoUnidadeMedida
+    numGuia = linha[0]
+    codProc = linha[1]
+    novoCodProc = linha[2]
+    codTabela = linha[3]
+    novoCodTabela = linha[4]
+    grauP = linha[5]
+    novoGrauP = linha[6]
+    codDespesa = linha[7]
+    novoCodDespesa = linha[8]
+    unidadeMedida = linha[9]
+    novoUnidadeMedida = linha[10]
+
+
+
+
