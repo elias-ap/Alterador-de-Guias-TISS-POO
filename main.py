@@ -1,16 +1,39 @@
-# This is a sample Python script.
+from poo import *
+import pandas as pd
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# READ WORKSHEET TABLE OF DATA ALTERATION
+tabelaDeCriticas = pd.read_excel("Planilha de Críticas.xlsx", sheet_name='Dados', dtype=str, keep_default_na=False)
 
+conta = ContaTiss()
+for linha in tabelaDeCriticas.values:
+    global numGuia,codProc,novoCodProc,codTabela,novoCodTabela,grauP,novoGrauP,codDespesa,novoCodDespesa,unidadeMedida,novoUnidadeMedida
+    numGuia = linha[0]
+    codProc = linha[1]
+    novoCodProc = linha[2]
+    codTabela = linha[3]
+    novoCodTabela = linha[4]
+    grauP = linha[5]
+    novoGrauP = linha[6]
+    codDespesa = linha[7]
+    novoCodDespesa = linha[8]
+    unidadeMedida = linha[9]
+    novoUnidadeMedida = linha[10]
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    for item in conta.guias:
+        guia = Guia(item, codProc)
 
+        print('----------- ' + guia.getNumeroGuia() + ' -----------')
+        if Et.iselement(guia.getProcedimentosExecutados()):
+            for procedimento in guia.getListaProcedimento():
+                p = Procedimento(procedimento)
+                p.alteraCodigoProcedimento(guia)
+                p.alteraValorUnitario(guia)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+        if Et.iselement(guia.getOutrasDespesas()):
+            for procedimento in guia.getListaDespesa():
+                p = Procedimento(procedimento)
+                p.alteraCodigoProcedimento(guia)
+                p.alteraValorUnitario(guia)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        else:
+            print('nao existe outras despesas nessa conta')
