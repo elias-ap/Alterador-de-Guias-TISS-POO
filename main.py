@@ -42,3 +42,5 @@ for linha in tabela.getTabelaValores():
             for procedimento in guia.getListaDespesa():
                 p = Procedimento(procedimento, guia)
                 p.alteraValorUnitario(valor, novoValor)
+
+conta.salvarConta()

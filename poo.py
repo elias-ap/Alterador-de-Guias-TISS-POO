@@ -1,3 +1,4 @@
+import os
 import xml.etree.ElementTree as Et
 from pandas import read_excel, DataFrame
 
@@ -5,19 +6,25 @@ ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
 
 class Conta:
-    corpo_guia: Et.Element
+    corpo_conta: Et.Element
+    caminho_conta: [str]
     guias: [Et.Element]
 
     def __init__(self):
-        caminho_guia = r"00000000000000011306_92a0e8826a52304e3ac85dfe30c83f38.xml"
-        self.corpo_guia = Et.parse(caminho_guia, parser=Et.XMLParser(encoding="ISO-8859-1")).getroot()
-        self.guias = self.corpo_guia.find('.//ans:guiasTISS', ans_prefix)
+        self.caminho_conta = r"00000000000000011306_92a0e8826a52304e3ac85dfe30c83f38.xml"
+        self.corpo_conta = Et.parse(self.caminho_conta, parser=Et.XMLParser(encoding="ISO-8859-1"))
+        self.guias = self.corpo_conta.getroot().find('.//ans:guiasTISS', ans_prefix)
 
     def setCorpoGuia(self, corpo_guia):
         self.setCorpoGuia(corpo_guia)
 
     def getCorpoGuia(self):
-        return self.corpo_guia
+        return self.corpo_conta
+
+    def salvarConta(self):
+        nome_da_conta = os.path.basename(self.caminho_conta).split("_")[0]
+        caminho = os.path.abspath(self.caminho_conta).rsplit("\\", 1)[0]
+        self.corpo_conta.write(f'{caminho}\{nome_da_conta}_TESTE.xml', encoding="ISO-8859-1")
 
 
 class Guia:
