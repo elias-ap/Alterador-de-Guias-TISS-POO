@@ -1,3 +1,4 @@
+import hashlib
 import os
 import xml.etree.ElementTree as Et
 from pandas import read_excel, DataFrame
@@ -6,25 +7,39 @@ ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
 
 class Conta:
-    corpo_conta: Et.Element
     caminho_conta: [str]
+    corpo_conta: Et.ElementTree
+    tag_raiz: Et.Element
     guias: [Et.Element]
 
     def __init__(self):
         self.caminho_conta = r"00000000000000011306_92a0e8826a52304e3ac85dfe30c83f38.xml"
         self.corpo_conta = Et.parse(self.caminho_conta, parser=Et.XMLParser(encoding="ISO-8859-1"))
-        self.guias = self.corpo_conta.getroot().find('.//ans:guiasTISS', ans_prefix)
-
-    def setCorpoGuia(self, corpo_guia):
-        self.setCorpoGuia(corpo_guia)
-
-    def getCorpoGuia(self):
-        return self.corpo_conta
+        self.tag_raiz = self.corpo_conta.getroot()
+        self.guias = self.tag_raiz.find('.//ans:guiasTISS', ans_prefix)
 
     def salvarConta(self):
         nome_da_conta = os.path.basename(self.caminho_conta).split("_")[0]
         caminho = os.path.abspath(self.caminho_conta).rsplit("\\", 1)[0]
-        self.corpo_conta.write(f'{caminho}\{nome_da_conta}_TESTE.xml', encoding="ISO-8859-1")
+        novo_codigo_hash = self.gerarNovoHash()
+        self.corpo_conta.write(f'{caminho}\{nome_da_conta}_{novo_codigo_hash}.xml', encoding="ISO-8859-1")
+
+    def gerarNovoHash(self):
+        self.tag_raiz.find('ans:epilogo', ans_prefix).find('ans:hash', ans_prefix).text = ''
+        todas_tags_da_conta = self.tag_raiz.iter()
+
+        lista_de_texto = []
+        linha_de_texto_unica = ''
+        for tag in todas_tags_da_conta:
+            # REMOVE OS PARÁGRAFOS
+            lista_de_texto.append(tag.text.replace("\n", ''))
+
+        for texto in lista_de_texto:
+            linha_de_texto_unica += texto
+
+        h = hashlib.md5(linha_de_texto_unica.encode('iso-8859-1'))
+        novo_codigo_hash = h.hexdigest()
+        return novo_codigo_hash
 
 
 class Guia:
@@ -126,7 +141,8 @@ class Procedimento:
     def alteraCodigoProcedimentoExecutado(self, codigo, novo_codigo):
         if self.podeAlterar():
             if len(self.guia.getListaProcedimento()) > 0:
-                tag_codigo_de_procedimento = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento', ans_prefix)
+                tag_codigo_de_procedimento = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento',
+                                                                         ans_prefix)
                 if tag_codigo_de_procedimento.text == codigo and novo_codigo != '':
                     tag_codigo_de_procedimento.text = novo_codigo
                     print(f"Codigo de procedimento (executado) alterado de {codigo} para {novo_codigo}")
@@ -195,7 +211,8 @@ class TabelaDeCritica:
     tabela_de_valores: DataFrame
 
     def __init__(self):
-        self.tabela_de_dados = read_excel("Planilha de Críticas.xlsx", sheet_name='Dados', dtype=str, keep_default_na=False)
+        self.tabela_de_dados = read_excel("Planilha de Críticas.xlsx", sheet_name='Dados', dtype=str,
+                                          keep_default_na=False)
         self.tabela_de_valores = read_excel("Planilha de Críticas.xlsx", sheet_name='Valores', dtype=str,
                                             keep_default_na=False)
         self.formataDadosTabelaValores()
@@ -248,6 +265,7 @@ def setLinhaAlteracaoDeDados(linha):
 
 
 def setLinhaAlteracaoDeValores(linha):
+    global numero_guia
     numero_guia = linha[0]
     codigo_procedimento = linha[1]
     valor_unitario = linha[2]
