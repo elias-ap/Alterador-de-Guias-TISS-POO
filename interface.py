@@ -1,4 +1,4 @@
-from poo import carregarGuia as cG, alteraDados, alteraValores, Conta
+from poo import carregarConta as cG, alteraDados, alteraValores, Conta
 
 
 
