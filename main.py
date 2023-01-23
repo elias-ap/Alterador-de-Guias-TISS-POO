@@ -252,11 +252,12 @@ class Procedimento:
     def alteraGrauDeParticipacao(self, grau, novo_grau):
         if self.podeAlterar() and len(self.guia.getListaDeProcedimentosExecutados()) > 0:
             tag_grau_participacao = self.getProcedimento().find('.//ans:grauPart', ans_prefix)
+
             if tag_grau_participacao.text == grau and novo_grau != '':
                 self.linha_alterada.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
-                     'Código de despesa',
+                     'Grau de participação',
                      tag_grau_participacao.text,
                      novo_grau)
                 )
@@ -266,6 +267,8 @@ class Procedimento:
     def alteraUnidadeDeMedida(self, unidade, nova_unidade):
         if self.podeAlterar() and len(self.guia.getListaDeDespesa()):
             tag_unidade_de_medida = self.getProcedimento().find('.//ans:unidadeMedida', ans_prefix)
+            # print(tag_unidade_de_medida.text, nova_unidade)
+            # print(unidade, nova_unidade)
             if tag_unidade_de_medida.text == unidade and nova_unidade != '':
                 self.linha_alterada.append(
                     (self.guia.getNumeroGuia(),
@@ -306,8 +309,15 @@ class Tabela:
     def formataDadosTabelaDados(self):
         for indice, texto in self.tabela_de_dados['Unidade de medida (novo)'].items():
             tamanho_texto = len(texto)
+
             if tamanho_texto == 2:
                 self.tabela_de_dados['Unidade de medida (novo)'][indice] = texto.rjust(tamanho_texto + 1, '0')
+
+        for indice, texto in self.tabela_de_dados['Unidade de medida (atual)'].items():
+            tamanho_texto = len(texto)
+
+            if tamanho_texto == 2:
+                self.tabela_de_dados['Unidade de medida (atual)'][indice] = texto.rjust(tamanho_texto + 1, '0')
 
         for indice, texto in self.tabela_de_dados['Tipo de tabela (novo)'].items():
             if texto == '0':
@@ -554,6 +564,7 @@ def alteraDados(conta):
                     p.alteraCodigoProcedimentoDespesa(codigoDeProcedimento, novoCodigoDeProcedimento)
                     p.alteraCodigoDeDespesa(codigoDeDesepsa, novoCodigoDeDespesa)
                     p.alteraCodigoDeTabela(tipoDeTabela, novoTipoDeTabela)
+                    print(unidadeDeMedida)
                     p.alteraUnidadeDeMedida(unidadeDeMedida, novoUnidadeDeMedida)
                     conta.qtd_alteracoes += p.qtd_alteracoes
                     conta.total_de_linhas_alteradas.append(p.linha_alterada)
