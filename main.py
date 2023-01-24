@@ -267,8 +267,7 @@ class Procedimento:
     def alteraUnidadeDeMedida(self, unidade, nova_unidade):
         if self.podeAlterar() and len(self.guia.getListaDeDespesa()):
             tag_unidade_de_medida = self.getProcedimento().find('.//ans:unidadeMedida', ans_prefix)
-            # print(tag_unidade_de_medida.text, nova_unidade)
-            # print(unidade, nova_unidade)
+
             if tag_unidade_de_medida.text == unidade and nova_unidade != '':
                 self.linha_alterada.append(
                     (self.guia.getNumeroGuia(),
@@ -338,7 +337,7 @@ class Tabela:
                 lista_tratada.append(item)
 
         df = DataFrame(lista_tratada,
-                       columns=['Número da conta', 'Código de procedimento', 'Dado alterado', 'De', 'Para'])
+                       columns=['Número da guia', 'Código de procedimento', 'Dado alterado', 'De', 'Para'])
 
         with ExcelWriter(
                 "Planilha de Críticas.xlsx",
@@ -473,8 +472,8 @@ class Interface:
 
     def salvarConta(self):
         self.conta.salvarConta()
-        mb.showinfo('Info', 'Arquivo salvo')
         self.cancelarOperacao()
+        mb.showinfo('Info', 'Arquivo salvo')
         Tabela.geraLog(self.conta.total_de_linhas_alteradas)
 
     def cancelarOperacao(self):
