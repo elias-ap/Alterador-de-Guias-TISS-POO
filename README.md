@@ -15,10 +15,10 @@ de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era f
 _Guia TISS_
 <img src="guia_TISS.png">
 
-## Projeto
+## 💻 Projeto
 
-<p align="justify">Realizar manutenção de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
-alterados estão: </p>
+Realizar manutenção de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
+alterados estão:
 
 * Código de procedimento;
 * Tipo de tabela;
@@ -28,7 +28,7 @@ alterados estão: </p>
 * Valor unitário;
 * Valor total;
 
-## Funcionalidades
+## ⚙ Funcionalidades
 
 ### Leitura de críticas
 
@@ -58,6 +58,8 @@ Quando vazia, irá realizar alteração em todas guias da conta para o procedime
 Para informações mais técnicas sobre a leitura das tabelas recomendo a visualização da classe responsável: </p>
 
 ```Python
-class Tabela
+class Tabela:
+    ...
+    ...
 ```
 
