@@ -9,7 +9,7 @@ from pandas import read_excel, DataFrame, ExcelWriter
 
 ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
-# Fechar aplicação se não estiver executando a partir do diretório definido
+# Fecha a aplicação se não estiver executando a partir do diretório definido
 caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
 caminho_de_execucao = getcwd()
 if caminho_de_execucao != caminho_diretorio:
@@ -58,6 +58,7 @@ class Conta:
         nome_da_conta = path.basename(self.caminho_da_conta).split("_")[0]
         caminho = path.abspath(self.caminho_da_conta).rsplit("\\", 1)[0]
         novo_codigo_hash = self.gerarNovoHash()
+        self.tag_raiz.find('ans:epilogo', ans_prefix).find('ans:hash', ans_prefix).text = novo_codigo_hash
         self.corpo_da_conta.write(f'{caminho}\\{nome_da_conta}_{novo_codigo_hash}.xml', encoding="ISO-8859-1")
 
 
@@ -563,7 +564,6 @@ def alteraDados(conta):
                     p.alteraCodigoProcedimentoDespesa(codigoDeProcedimento, novoCodigoDeProcedimento)
                     p.alteraCodigoDeDespesa(codigoDeDesepsa, novoCodigoDeDespesa)
                     p.alteraCodigoDeTabela(tipoDeTabela, novoTipoDeTabela)
-                    print(unidadeDeMedida)
                     p.alteraUnidadeDeMedida(unidadeDeMedida, novoUnidadeDeMedida)
                     conta.qtd_alteracoes += p.qtd_alteracoes
                     conta.total_de_linhas_alteradas.append(p.linha_alterada)
