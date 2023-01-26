@@ -1,16 +1,27 @@
 <h1 align="center">Alterador de Guias TISS</h1>
 
-<p align="justify">A ideia inicial desse projeto nasceu da necessidade de uma ferramenta capaz de realizar manutenções/alterações de 
+<p align="center"><img src="guide_icon4 (1).ico" width="10%" height="10%"></p> 
+
+---
+
+<p align="center">A ideia inicial desse projeto nasceu da necessidade de uma ferramenta capaz de realizar manutenções/alterações de 
 dados eletrônicos em guias médicas (arquivos XML) no <b>padrão TISS</b> definido pela ANS, com propósito 
 de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era feita de forma manual através de editores de texto como 
 ++Notepad, bloco de notas, etc.</p>
 
-<div style="align-items: center; display: flex; gap: 30px; align: center"  > <h1><a href="##Objetivo">Objetivo</a></h1> <h1><a href="##Objetivo">Objetivo</a></h1></div>
+<p align="center">
+    <a href="#-Projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#-Funcionalidades">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#-Tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#-Tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    
+
+</p>
 
 _Guia TISS_
 <img src="guia_TISS.png">
 
-## Objetivo
+## Projeto
 
 <p align="justify">Realizar manutenção de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
 alterados estão: </p>
