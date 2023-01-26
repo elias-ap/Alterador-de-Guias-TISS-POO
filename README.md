@@ -12,8 +12,7 @@ de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era f
     <a href="#-licença">Licença</a>&nbsp;&nbsp;&nbsp;
 </p>
 
-_Guia TISS_
-<img src="guia_TISS.png">
+todo --> Imagem ilustrativa do projeto
 
 ## 💻 Projeto
 
@@ -30,7 +29,13 @@ alterados estão:
 
 ## ⚙ Funcionalidades
 
-### Leitura de críticas
+1. <a href="#-leitura-de-críticas">Leitura de críticas;</a>
+2. <a>Alteração de dados;</a>
+3. <a>Alteração de valores;</a>
+4. <a>Gerar código hash;</a>
+5. <a>Salvar arquivo;</a>
+
+### 📖 Leitura de críticas
 
 <p align="justify">Para realização das alterações, é necessário a entrada dos dados a serem alterados em tabelas
 que serão lidas pelo software.</p>
