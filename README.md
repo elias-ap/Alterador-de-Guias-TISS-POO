@@ -1,7 +1,5 @@
 <h1 align="center">Alterador de Guias TISS</h1>
 
-<p align="center"><img src="guide_icon4 (1).ico" width="10%" height="10%"></p> 
-
 ---
 
 <p align="center">A ideia inicial desse projeto nasceu da necessidade de uma ferramenta capaz de realizar manutenções/alterações de 
