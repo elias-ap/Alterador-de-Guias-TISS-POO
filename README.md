@@ -37,34 +37,44 @@ alterados estão:
 
 ### 📖 Leitura de críticas
 
-<p align="justify">Para realização das alterações, é necessário a entrada dos dados a serem alterados em tabelas
-que serão lidas pelo software.</p>
+Para leitura das críticas/correções, é necessário a entrada dos dados a serem alterados em tabelas
+que serão lidas pelo software.
 
-Foi criado uma [planilha em formato XLSX](Planilha de Críticas.xlsx) no repositório contendo tabelas padronizadas 
+Foi criado uma <a>planilha em formato XLSX</a> no repositório contendo tabelas padronizadas 
 para duas categorias de alterações.
 
-<p align="justify">Abaixo estão as colunas das tabelas que representam os dados que serão alterados:</p>
+Abaixo estão as colunas das tabelas que representam os dados que serão alterados:
 
-> Alterações de dados:
+#### Categoria de dados
 
 | Número da guia | Código de procedimento (atual) | Código de procedimento (novo) | Tipo de tabela (atual) | Tipo de tabela (nova) | Grau de participação (atual) | Grau de participação (novo) | Código de despesa (atual) | Código de despesa (novo) | Unidade de Medida (atual) | Unidade de Medida (novo) |
 |----------------|--------------------------------|-------------------------------|------------------------|-----------------------|------------------------------|-----------------------------|---------------------------|--------------------------|---------------------------|--------------------------|
 
 <br>
 
-> Alterações de valores:
+#### Categoria de valores
 
 | Número da guia | Código de procedimento | Valor unitário (atual) | Valor unitário (novo) |
 |----------------|------------------------|------------------------|-----------------------|
 
+<br>
 
-<p align="justify">Em ambas tabelas, a coluna número da guia pode ser preenchida para especificar uma guia a ser realizada alteração.<br>
-Quando vazia, irá realizar alteração em todas guias da conta para o procedimento especificado.<br><br>
-Para informações mais técnicas sobre a leitura das tabelas recomendo a visualização da classe responsável: </p>
+Em ambas tabelas, a coluna número da guia pode ser preenchida para especificar uma guia a ser realizada alteração.
+Quando vazia, irá realizar alteração no procedimento especificado em todas guias da conta.
+
+Para informações mais técnicas sobre a leitura das tabelas recomendo a visualização da classe responsável:
 
 ```Python
 class Tabela:
     ...
     ...
 ```
+
+---
+
+### Alteração de dados
+
+Na alteração de dados, o software interpretará cada linha das tabelas de altraçõ
+
+
 
