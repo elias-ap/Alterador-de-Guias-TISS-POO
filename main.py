@@ -137,10 +137,6 @@ class Guia:
                 break
 
 
-
-# Teste
-# teste
-#teste
 class Procedimento:
     procedimento: ElementTree
     guia: Guia
