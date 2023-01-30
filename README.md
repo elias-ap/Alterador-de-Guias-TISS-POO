@@ -50,7 +50,7 @@ TODO --> Imagem ilustrativa do Layout
 Para leitura das críticas/correções, é necessário a entrada dos dados a serem alterados em tabelas
 que serão lidas pelo software.
 
-Foi criado uma <a href="Planilha-de-Críticas.xlsx">planilha em formato XLSX</a> no repositório contendo tabelas padronizadas 
+Foi criado uma <a href="../Planilha-de-Críticas.xlsx">planilha em formato XLSX</a> no repositório contendo tabelas padronizadas 
 para duas categorias de alterações.
 
 Abaixo estão as colunas das tabelas que representam os dados que serão alterados:
