@@ -137,6 +137,10 @@ class Guia:
                 break
 
 
+
+
+
+
 class Procedimento:
     procedimento: ElementTree
     guia: Guia
