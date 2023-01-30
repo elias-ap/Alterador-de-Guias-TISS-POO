@@ -6,17 +6,33 @@ de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era f
 ++Notepad, bloco de notas, etc.</p>
 
 <p align="center">
+    <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-funcionalidades">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-licença">Licença</a>&nbsp;&nbsp;&nbsp;
 </p>
 
 todo --> Imagem ilustrativa do projeto
 
+## 🚀 Tecnologias
+
+Esse projeto foi desenvolvido com as seguintes tecnologias:
+
+* Python;
+* GitHub;
+
+### 📚 Bibliotecas
+
+* os;
+* customtkinter;
+* tkinter;
+* sys;
+* xml.etree;
+* hashlib;
+
 ## 💻 Projeto
 
-Realizar manutenção de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
+Realizar alteração de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
 alterados estão:
 
 * Código de procedimento;
@@ -31,13 +47,11 @@ alterados estão:
 
 ## ⚙ Funcionalidades
 
-1. <a href="#-leitura-de-críticas">Leitura de críticas;</a>
-2. <a>Alteração de dados;</a>
-3. <a>Alteração de valores;</a>
-4. <a>Gerar código hash;</a>
-5. <a>Salvar arquivo;</a>
+1. <a href="#-leitura-de-tabelas">Leitura de tabelas;</a>
+2. <a href="#-alteracoes-em-arquivo-xml">Alterações em arquivo XML;</a>
+3. <a>Gerar código hash;</a>
 
-### 📖 Leitura de críticas
+### 📖 Leitura de tabelas
 
 Para leitura das críticas/correções, é necessário a entrada dos dados a serem alterados em tabelas
 que serão lidas pelo software.
@@ -61,8 +75,9 @@ Abaixo estão as colunas das tabelas que representam os dados que serão alterad
 
 <br>
 
-Em ambas tabelas, a coluna número da guia pode ser preenchida para especificar uma guia a ser realizada alteração.
-Quando vazia, irá realizar alteração no procedimento especificado em todas guias da conta.
+Em ambas tabelas, a coluna número da guia pode ser preenchida para especificar uma guia a ser feita as alterações.
+Quando não estiver preenchida, o software entende que será realizada alteração no procedimento especificado em
+todas guias da conta.
 
 Para informações mais técnicas sobre a leitura das tabelas recomendo a visualização da classe responsável:
 
@@ -72,10 +87,13 @@ class Tabela:
     ...
 ```
 
-### ✍ Alterações
+### ✍ Alterações em arquivo XML
 
-Na alteração de dados, o software interpreta cada linha das tabelas de alterações e busca pelo código de procedimento
-especificado, caso encontre verifica se o dado (atual) é igual ao passado na tabela, se for realiza o de/para.
+O software faz as alterações de acordo com a leitura das tabelas, para cada linha será feita uma busca dentro das guias
+pelo código de procedimento passado e realizando alteração caso os dados a serem alterados estejam de acordo (de/para). 
+
+Após realização das alterações, o software disponibiliza o botão de salvar que ao clicar, gera um novo arquivo XML com
+as alterações.
 
 
 
