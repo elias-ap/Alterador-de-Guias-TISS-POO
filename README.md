@@ -94,6 +94,8 @@ Dentro dos arquivos XML de guias TISS existe uma tag onde é armazenado o códig
 salvar o arquivo e gerar hash, o software gera um novo código para os arquivos selecionados, caso tenham sido realizadas alterações,
 substitui o código antigo pelo novo.
 
+> Para informações mais técnicas sobre gerar código hash<a href="main.py#L37">função</a> responsável.
+
 ## 📝 Licença
 
 Esse software está sob a licença 
