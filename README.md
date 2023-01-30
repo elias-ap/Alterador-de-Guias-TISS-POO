@@ -21,15 +21,6 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 * Python;
 * GitHub;
 
-### 📚 Bibliotecas
-
-* os;
-* customtkinter;
-* tkinter;
-* sys;
-* xml.etree;
-* hashlib;
-
 ## 💻 Projeto
 
 Realizar alteração de dados eletrônicos em guias médicas no padrão TISS. Dentre os dados a serem
@@ -48,7 +39,7 @@ alterados estão:
 ## ⚙ Funcionalidades
 
 1. <a href="#-leitura-de-tabelas">Leitura de tabelas;</a>
-2. <a href="#-alteracoes-em-arquivo-xml">Alterações em arquivo XML;</a>
+2. <a href="#-alterações-em-arquivo-xml">Alterações em arquivo XML;</a>
 3. <a>Gerar código hash;</a>
 
 ### 📖 Leitura de tabelas
@@ -90,12 +81,22 @@ class Tabela:
 ### ✍ Alterações em arquivo XML
 
 O software faz as alterações de acordo com a leitura das tabelas, para cada linha será feita uma busca dentro das guias
-pelo código de procedimento passado e realizando alteração caso os dados a serem alterados estejam de acordo (de/para). 
+no arquivo pelo código de procedimento passado, realizando alteração caso os dados a serem alterados estejam de
+acordo (de/para). 
 
 Após realização das alterações, o software disponibiliza o botão de salvar que ao clicar, gera um novo arquivo XML com
 as alterações.
 
+### 🔐 Gerar código hash 
 
+Dentro das guias no padrão TISS existe uma tag onde é armazenado o código hash do arquivo. Ao interagir com os botões de
+salvar o arquivo e gerar hash, o software gera um novo código para os arquivos selecionados, caso tenham sido realizadas alterações,
+substitui o código antigo pelo novo.
+
+### 📝 Licença
+
+Esse software está sob a licença 
+<a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL 2.0 (General Public License).</a>
 
 
 
