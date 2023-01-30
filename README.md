@@ -34,8 +34,6 @@ alterados estão:
 * Valor unitário;
 * Valor total;
 
----
-
 ## ⚙ Funcionalidades
 
 1. <a href="#-leitura-de-tabelas">Leitura de tabelas;</a>
