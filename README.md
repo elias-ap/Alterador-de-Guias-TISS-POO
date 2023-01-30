@@ -27,6 +27,8 @@ alterados estão:
 * Valor unitário;
 * Valor total;
 
+---
+
 ## ⚙ Funcionalidades
 
 1. <a href="#-leitura-de-críticas">Leitura de críticas;</a>
@@ -45,14 +47,14 @@ para duas categorias de alterações.
 
 Abaixo estão as colunas das tabelas que representam os dados que serão alterados:
 
-#### Categoria de dados
+#### 🎲 Categoria de dados
 
 | Número da guia | Código de procedimento (atual) | Código de procedimento (novo) | Tipo de tabela (atual) | Tipo de tabela (nova) | Grau de participação (atual) | Grau de participação (novo) | Código de despesa (atual) | Código de despesa (novo) | Unidade de Medida (atual) | Unidade de Medida (novo) |
 |----------------|--------------------------------|-------------------------------|------------------------|-----------------------|------------------------------|-----------------------------|---------------------------|--------------------------|---------------------------|--------------------------|
 
 <br>
 
-#### Categoria de valores
+#### 💰 Categoria de valores
 
 | Número da guia | Código de procedimento | Valor unitário (atual) | Valor unitário (novo) |
 |----------------|------------------------|------------------------|-----------------------|
@@ -70,11 +72,14 @@ class Tabela:
     ...
 ```
 
----
+### ✍ Alterações
 
-### Alteração de dados
+Na alteração de dados, o software interpreta cada linha das tabelas de alterações e busca pelo código de procedimento
+especificado, caso encontre verifica se o dado (atual) é igual ao passado na tabela, se for realiza o de/para.
 
-Na alteração de dados, o software interpretará cada linha das tabelas de altraçõ
+
+
+
 
 
 
