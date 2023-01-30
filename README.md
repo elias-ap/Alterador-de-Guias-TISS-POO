@@ -8,11 +8,12 @@ de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era f
 <p align="center">
     <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+    <a href="#-layout">Layout</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-funcionalidades">Funcionalidades</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
     <a href="#-licença">Licença</a>&nbsp;&nbsp;&nbsp;
 </p>
 
-todo --> Imagem ilustrativa do projeto
+TODO --> Imagem ilustrativa do Projeto
 
 ## 🚀 Tecnologias
 
@@ -34,11 +35,15 @@ alterados estão:
 * Valor unitário;
 * Valor total;
 
+## 🔖 Layout
+
+TODO --> Imagem ilustrativa do Layout
+
 ## ⚙ Funcionalidades
 
 1. <a href="#-leitura-de-tabelas">Leitura de tabelas;</a>
 2. <a href="#-alterações-em-arquivo-xml">Alterações em arquivo XML;</a>
-3. <a>Gerar código hash;</a>
+3. <a href="#-gerar-código-hash">Gerar código hash;</a>
 
 ### 📖 Leitura de tabelas
 
@@ -68,13 +73,9 @@ Em ambas tabelas, a coluna número da guia pode ser preenchida para especificar 
 Quando não estiver preenchida, o software entende que será realizada alteração no procedimento especificado em
 todas guias da conta.
 
-Para informações mais técnicas sobre a leitura das tabelas recomendo a visualização da classe responsável:
+> Para informações mais técnicas sobre a leitura das tabelas consulte a <a href="main.py#L284">classe</a> responsável.
 
-```Python
-class Tabela:
-    ...
-    ...
-```
+
 
 ### ✍ Alterações em arquivo XML
 
@@ -85,13 +86,15 @@ acordo (de/para).
 Após realização das alterações, o software disponibiliza o botão de salvar que ao clicar, gera um novo arquivo XML com
 as alterações.
 
+> Para informações mais técnicas sobre as alterações consulte a <a href="main.py#L140">classe</a> responsável.
+
 ### 🔐 Gerar código hash 
 
-Dentro das guias no padrão TISS existe uma tag onde é armazenado o código hash do arquivo. Ao interagir com os botões de
+Dentro dos arquivos XML de guias TISS existe uma tag onde é armazenado o código hash do arquivo. Ao interagir com os botões de
 salvar o arquivo e gerar hash, o software gera um novo código para os arquivos selecionados, caso tenham sido realizadas alterações,
 substitui o código antigo pelo novo.
 
-### 📝 Licença
+## 📝 Licença
 
 Esse software está sob a licença 
 <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL 2.0 (General Public License).</a>
