@@ -35,10 +35,6 @@ alterados estão:
 * Valor unitário;
 * Valor total;
 
-## 🔖 Layout
-
-TODO --> Imagem ilustrativa do Layout
-
 ## ⚙ Funcionalidades
 
 1. <a href="#-leitura-de-tabelas">Leitura de tabelas;</a>
