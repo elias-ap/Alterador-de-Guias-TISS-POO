@@ -12,7 +12,7 @@ de otimizar o tempo gasto para essa tarefa que até então em meu trabalho era f
     <a href="#-licença">Licença</a>&nbsp;&nbsp;&nbsp;
 </p>
 
-<img src="preview.jpg">
+<img src="assets/preview.jpg">
 
 ## 🚀 Tecnologias
 
