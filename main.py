@@ -10,12 +10,12 @@ from pandas import read_excel, DataFrame, ExcelWriter
 ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
 # Fecha a aplicação se não estiver executando a partir do diretório definido
-caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
-caminho_de_execucao = getcwd()
-if caminho_de_execucao != caminho_diretorio:
-    mb.showwarning('Erro',
-                   f'A aplicação só pode ser executada a partir do diretório original:\n{caminho_diretorio}')
-    exit()
+# caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
+# caminho_de_execucao = getcwd()
+# if caminho_de_execucao != caminho_diretorio:
+#     mb.showwarning('Erro',
+#                    f'A aplicação só pode ser executada a partir do diretório original:\n{caminho_diretorio}')
+#     exit()
 
 
 class Conta:
@@ -195,31 +195,35 @@ class Procedimento:
                 self.qtd_alteracoes += 1
 
     def alteraValorUnitario(self, valor, novo_valor):
-        if self.podeAlterar() and len(self.guia.getListaDeDespesa()) > 0 or len(
-                self.guia.getListaDeProcedimentosExecutados()) > 0:
-            tag_valor_unitario = self.getProcedimento().find('.//ans:valorUnitario', ans_prefix)
-            quantidade_executada = float(
-                self.getProcedimento().find('.//ans:quantidadeExecutada', ans_prefix).text)
-            valor_total = self.getProcedimento().find('.//ans:valorTotal', ans_prefix)
+        try:
+            if self.podeAlterar() and len(self.guia.getListaDeDespesa()) > 0 or len(
+                    self.guia.getListaDeProcedimentosExecutados()) > 0:
 
-            if float(tag_valor_unitario.text) == valor and float(tag_valor_unitario.text) != novo_valor:
-                novoValorTotal = float(novo_valor * quantidade_executada)
-                if float(valor_total.text) > novoValorTotal:
-                    diferenca = (float(valor_total.text) - novoValorTotal)
-                else:
-                    diferenca = (novoValorTotal - float(valor_total.text))
+                tag_valor_unitario = self.getProcedimento().find('.//ans:valorUnitario', ans_prefix)
+                quantidade_executada = float(
+                    self.getProcedimento().find('.//ans:quantidadeExecutada', ans_prefix).text)
+                valor_total = self.getProcedimento().find('.//ans:valorTotal', ans_prefix)
 
-                self.linha_alterada.append(
-                    (self.guia.getNumeroGuia(),
-                     self.guia.codigo_de_procedimento,
-                     'Valor unitário',
-                     tag_valor_unitario.text,
-                     novo_valor)
-                )
-                tag_valor_unitario.text = '%.2f' % novo_valor
-                valor_total.text = '%.2f' % novoValorTotal
-                self.qtd_alteracoes += 1
-                self.guia.alteraValorTotalGeral(diferenca)
+                if float(tag_valor_unitario.text) == valor and float(tag_valor_unitario.text) != novo_valor:
+                    novoValorTotal = float(novo_valor * quantidade_executada)
+                    if float(valor_total.text) > novoValorTotal:
+                        diferenca = (float(valor_total.text) - novoValorTotal)
+                    else:
+                        diferenca = (novoValorTotal - float(valor_total.text))
+
+                    self.linha_alterada.append(
+                        (self.guia.getNumeroGuia(),
+                         self.guia.codigo_de_procedimento,
+                         'Valor unitário',
+                         tag_valor_unitario.text,
+                         novo_valor)
+                    )
+                    tag_valor_unitario.text = '%.2f' % novo_valor
+                    valor_total.text = '%.2f' % novoValorTotal
+                    self.qtd_alteracoes += 1
+                    self.guia.alteraValorTotalGeral(diferenca)
+        except AttributeError:
+            pass
 
     def alteraCodigoDeTabela(self, codigo, novo_codigo):
         if self.podeAlterar() and len(self.guia.getListaDeDespesa()) > 0 or len(
