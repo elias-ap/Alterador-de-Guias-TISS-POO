@@ -9,7 +9,7 @@ from pandas import read_excel, DataFrame, ExcelWriter
 
 ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
-Fecha a aplicação se não estiver executando a partir do diretório definido
+# Fecha a aplicação se não estiver executando a partir do diretório definido
 caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
 caminho_de_execucao = getcwd()
 if caminho_de_execucao != caminho_diretorio:
