@@ -9,7 +9,8 @@ from pandas import read_excel, DataFrame, ExcelWriter
 
 ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
-# Fecha a aplicação se não estiver executando a partir do diretório definido
+
+# # Fecha a aplicação se não estiver executando a partir do diretório definido
 caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
 caminho_de_execucao = getcwd()
 if caminho_de_execucao != caminho_diretorio:
@@ -141,12 +142,12 @@ class Procedimento:
     procedimento: ElementTree
     guia: Guia
     qtd_alteracoes: int = 0
-    linha_alterada: list
+    lista_de_alteracoes: list
 
     def __init__(self, procedimento, guia):
         self.setProcedimento(procedimento)
         self.guia = guia
-        self.linha_alterada = []
+        self.lista_de_alteracoes = []
 
     def setProcedimento(self, procedimento):
         self.procedimento = procedimento
@@ -170,7 +171,7 @@ class Procedimento:
             tag_codigo_de_procedimento = self.getProcedimento().find('ans:procedimento/ans:codigoProcedimento',
                                                                      ans_prefix)
             if tag_codigo_de_procedimento.text == codigo and novo_codigo != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Código de procedimento',
@@ -184,7 +185,7 @@ class Procedimento:
         if self.podeAlterar() and len(self.guia.getListaDeDespesa()) > 0:
             tag_codigo_de_procedimento = self.getProcedimento().find('.//ans:codigoProcedimento', ans_prefix)
             if tag_codigo_de_procedimento.text == codigo and novo_codigo != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Código de procedimento',
@@ -211,7 +212,40 @@ class Procedimento:
                     else:
                         diferenca = (novoValorTotal - float(valor_total.text))
 
-                    self.linha_alterada.append(
+                    self.lista_de_alteracoes.append(
+                        (self.guia.getNumeroGuia(),
+                         self.guia.codigo_de_procedimento,
+                         'Valor unitário',
+                         tag_valor_unitario.text,
+                         novo_valor)
+                    )
+                    tag_valor_unitario.text = '%.2f' % novo_valor
+                    valor_total.text = '%.2f' % novoValorTotal
+                    self.qtd_alteracoes += 1
+                    self.guia.alteraValorTotalGeral(diferenca)
+        except AttributeError:
+            pass
+
+    def alteraValorUnitarioQuantidades(self, valor, novo_valor, quantidade_executada_atual, quantidade_executada_novo):
+        try:
+            if self.podeAlterar() and len(self.guia.getListaDeDespesa()) > 0 or len(
+                    self.guia.getListaDeProcedimentosExecutados()) > 0:
+
+                tag_valor_unitario = self.getProcedimento().find('.//ans:valorUnitario', ans_prefix)
+                tag_quantidade_executada = self.getProcedimento().find('.//ans:quantidadeExecutada', ans_prefix)
+                valor_total = self.getProcedimento().find('.//ans:valorTotal', ans_prefix)
+
+                if float(tag_valor_unitario.text) == valor and float(
+                        tag_valor_unitario.text) != novo_valor and quantidade_executada_atual == float(
+                        tag_quantidade_executada.text):
+                    tag_quantidade_executada.text = '%.2f' % quantidade_executada_novo
+                    novoValorTotal = float(novo_valor * quantidade_executada_novo)
+                    if float(valor_total.text) > novoValorTotal:
+                        diferenca = (float(valor_total.text) - novoValorTotal)
+                    else:
+                        diferenca = (novoValorTotal - float(valor_total.text))
+
+                    self.lista_de_alteracoes.append(
                         (self.guia.getNumeroGuia(),
                          self.guia.codigo_de_procedimento,
                          'Valor unitário',
@@ -230,7 +264,7 @@ class Procedimento:
                 self.guia.getListaDeProcedimentosExecutados()) > 0:
             tag_codigo_tabela = self.getProcedimento().find('.//ans:codigoTabela', ans_prefix)
             if tag_codigo_tabela.text == codigo and novo_codigo != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Código de tabela',
@@ -244,7 +278,7 @@ class Procedimento:
         if self.podeAlterar() and len(self.guia.getListaDeDespesa()):
             tag_codigo_despesa = self.getProcedimento().find('.//ans:codigoDespesa', ans_prefix)
             if tag_codigo_despesa.text == codigo and novo_codigo != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Código de despesa',
@@ -259,7 +293,7 @@ class Procedimento:
             tag_grau_participacao = self.getProcedimento().find('.//ans:grauPart', ans_prefix)
 
             if tag_grau_participacao.text == grau and novo_grau != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Grau de participação',
@@ -274,7 +308,7 @@ class Procedimento:
             tag_unidade_de_medida = self.getProcedimento().find('.//ans:unidadeMedida', ans_prefix)
 
             if tag_unidade_de_medida.text == unidade and nova_unidade != '':
-                self.linha_alterada.append(
+                self.lista_de_alteracoes.append(
                     (self.guia.getNumeroGuia(),
                      self.guia.codigo_de_procedimento,
                      'Unidade de medida',
@@ -288,6 +322,7 @@ class Procedimento:
 class Tabela:
     tabela_de_dados: DataFrame
     tabela_de_valores: DataFrame
+    tabela_de_valores_quantidades: DataFrame
     tabela_de_logs: DataFrame
 
     def __init__(self):
@@ -295,6 +330,10 @@ class Tabela:
                                           keep_default_na=False)
         self.tabela_de_valores = read_excel("Planilha de Críticas.xlsx", sheet_name='Valores', dtype=str,
                                             keep_default_na=False)
+
+        self.tabela_de_valores_quantidades = read_excel("Planilha de Críticas.xlsx", sheet_name='Valores e Quantidades',
+                                                        dtype=str,
+                                                        keep_default_na=False)
 
         self.tabela_de_logs = read_excel("Planilha de Críticas.xlsx", sheet_name='Log', dtype=str,
                                          keep_default_na=False)
@@ -309,6 +348,22 @@ class Tabela:
         self.tabela_de_valores['Valor unitário (novo)'] = coluna_valor_novo
         self.tabela_de_valores['Valor unitário (atual)'] = coluna_valor_atual.astype(float)
         self.tabela_de_valores['Valor unitário (novo)'] = coluna_valor_novo.astype(float)
+
+        coluna_valor_atual = self.tabela_de_valores_quantidades['Valor unitário (atual)'].str.replace(',', '.')
+        coluna_valor_novo = self.tabela_de_valores_quantidades['Valor unitário (novo)'].str.replace(',', '.')
+
+        self.tabela_de_valores_quantidades['Valor unitário (atual)'] = coluna_valor_atual
+        self.tabela_de_valores_quantidades['Valor unitário (novo)'] = coluna_valor_novo
+        self.tabela_de_valores_quantidades['Valor unitário (atual)'] = coluna_valor_atual.astype(float)
+        self.tabela_de_valores_quantidades['Valor unitário (novo)'] = coluna_valor_novo.astype(float)
+
+        coluna_valor_atual = self.tabela_de_valores_quantidades['Quantidade executada (atual)'].str.replace(',', '.')
+        coluna_valor_novo = self.tabela_de_valores_quantidades['Quantidade executada (novo)'].str.replace(',', '.')
+
+        self.tabela_de_valores_quantidades['Quantidade executada (atual)'] = coluna_valor_atual
+        self.tabela_de_valores_quantidades['Quantidade executada (novo)'] = coluna_valor_novo
+        self.tabela_de_valores_quantidades['Quantidade executada (atual)'] = coluna_valor_atual.astype(float)
+        self.tabela_de_valores_quantidades['Quantidade executada (novo)'] = coluna_valor_novo.astype(float)
 
     def formataDadosTabelaDados(self):
         for indice, texto in self.tabela_de_dados['Unidade de medida (novo)'].items():
@@ -333,6 +388,9 @@ class Tabela:
 
     def getTabelaValores(self):
         return self.tabela_de_valores.values
+
+    def getTabelaValoresQuantidades(self):
+        return self.tabela_de_valores_quantidades.values
 
     @staticmethod
     def geraLog(lista_de_alteracoes):
@@ -369,6 +427,7 @@ class Interface:
     tipo_de_alteracoes: CTkLabel
     alteracao_de_dados: CTkSwitch
     alteracao_de_valor: CTkSwitch
+    alteracao_de_valores_e_quantidades: CTkSwitch
 
     realizar_alteracoes: CTkButton
     cancelar: CTkButton
@@ -379,10 +438,10 @@ class Interface:
     def __init__(self):
         # Configurações da janela principal
         self.janela_principal = CTk()
-        self.janela_principal.geometry('300x260')
+        self.janela_principal.geometry('400x310')
         self.janela_principal.title('Alterador de Guias TISS')
         self.janela_principal.eval('tk::PlaceWindow . center')
-        self.janela_principal.maxsize(300, 260)
+        self.janela_principal.maxsize(400, 310)
 
         self.frame = CTkFrame(self.janela_principal)
         self.frame.pack(side='left', fill='both', padx=10, pady=10, expand=True)
@@ -413,6 +472,10 @@ class Interface:
         self.alteracao_de_valor = CTkSwitch(self.frame, text='Alteração de valor', text_color='white')
         self.alteracao_de_valor.pack(side='top', padx=5, pady=10)
 
+        self.alteracao_de_valores_e_quantidades = CTkSwitch(self.frame, text='Alteração de valores e quantidade',
+                                                            text_color='white')
+        self.alteracao_de_valores_e_quantidades.pack(side='top', padx=5, pady=10)
+
         self.cancelar = CTkButton(self.frame, text='Cancelar', command=lambda: self.cancelarOperacao())
         self.cancelar.pack(side='bottom', pady=5, padx=5)
 
@@ -438,6 +501,8 @@ class Interface:
     def defineTipoDeAlteracao(self):
         altera_dados = self.alteracao_de_dados.get()
         altera_valores = self.alteracao_de_valor.get()
+        altera_valores_e_quantidades = self.alteracao_de_valores_e_quantidades.get()
+
         if altera_dados == 1:
             altera_dados = True
         else:
@@ -448,10 +513,15 @@ class Interface:
         else:
             altera_valores = False
 
-        return altera_dados, altera_valores
+        if altera_valores_e_quantidades == 1:
+            altera_valores_e_quantidades = True
+        else:
+            altera_valores_e_quantidades = False
+
+        return altera_dados, altera_valores, altera_valores_e_quantidades
 
     def alterar(self):
-        altera_dados, altera_valores = self.defineTipoDeAlteracao()
+        altera_dados, altera_valores, altera_valores_e_quantidades = self.defineTipoDeAlteracao()
 
         if altera_dados is True:
             alteraDados(self.conta)
@@ -459,7 +529,10 @@ class Interface:
         if altera_valores is True:
             alteraValores(self.conta)
 
-        if altera_dados is False and altera_valores is False:
+        if altera_valores_e_quantidades is True:
+            alteraValoresQuantidades(self.conta)
+
+        if altera_dados is False and altera_valores is False and altera_valores_e_quantidades is False:
             mb.showinfo('Info', 'Informe o tipo de alteração a ser realizada')
 
         elif self.conta.qtd_alteracoes > 0:
@@ -469,7 +542,7 @@ class Interface:
 
     def aguardarSalvamento(self):
         for button in (self.realizar_alteracoes, self.alteracao_de_valor,
-                       self.alteracao_de_dados, self.tipo_de_alteracoes):
+                       self.alteracao_de_dados, self.tipo_de_alteracoes, self.alteracao_de_valores_e_quantidades):
             button.destroy()
 
         self.salvar_conta = CTkButton(self.frame, text='Salvar Guia', command=lambda: self.salvarConta())
@@ -486,7 +559,7 @@ class Interface:
             for button in (
                     self.realizar_alteracoes, self.cancelar, self.alteracao_de_dados,
                     self.alteracao_de_valor,
-                    self.tipo_de_alteracoes, self.abrir_planilha):
+                    self.tipo_de_alteracoes, self.abrir_planilha, self.alteracao_de_valores_e_quantidades):
                 button.destroy()
         elif self.conta.qtd_alteracoes > 0:
             for button in (self.salvar_conta, self.cancelar, self.abrir_planilha):
@@ -543,6 +616,18 @@ def setLinhaAlteracaoDeValores(linha):
     return numero_guia, codigo_procedimento, valor_unitario, novo_valor_unitario
 
 
+def setLinhaAlteracaoDeValoresQuantidades(linha):
+    global numero_guia
+    numero_guia = linha[0]
+    codigo_procedimento = linha[1]
+    valor_unitario = linha[2]
+    novo_valor_unitario = linha[3]
+    quantidade_executada = linha[4]
+    quantidade_executada_novo = linha[5]
+
+    return numero_guia, codigo_procedimento, valor_unitario, novo_valor_unitario, quantidade_executada, quantidade_executada_novo
+
+
 def alteraDados(conta):
     tabela = Tabela()
     for linha in tabela.getTabelaDados():
@@ -560,7 +645,7 @@ def alteraDados(conta):
                     p.alteraGrauDeParticipacao(grauDeParticipacao, novoGrauDeParticipacao)
                     p.alteraCodigoDeTabela(tipoDeTabela, novoTipoDeTabela)
                     conta.qtd_alteracoes += p.qtd_alteracoes
-                    conta.total_de_linhas_alteradas.append(p.linha_alterada)
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
 
             if iselement(guia.getOutrasDespesas()):
                 for procedimento in guia.getListaDeDespesa():
@@ -570,7 +655,7 @@ def alteraDados(conta):
                     p.alteraCodigoDeTabela(tipoDeTabela, novoTipoDeTabela)
                     p.alteraUnidadeDeMedida(unidadeDeMedida, novoUnidadeDeMedida)
                     conta.qtd_alteracoes += p.qtd_alteracoes
-                    conta.total_de_linhas_alteradas.append(p.linha_alterada)
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
 
 
 def alteraValores(conta):
@@ -586,15 +671,45 @@ def alteraValores(conta):
                     p = Procedimento(procedimento, guia)
                     p.alteraValorUnitario(valor, novoValor)
                     conta.qtd_alteracoes += p.qtd_alteracoes
-                    conta.total_de_linhas_alteradas.append(p.linha_alterada)
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
 
             if iselement(guia.getOutrasDespesas()):
                 for procedimento in guia.getListaDeDespesa():
                     p = Procedimento(procedimento, guia)
                     p.alteraValorUnitario(valor, novoValor)
                     conta.qtd_alteracoes += p.qtd_alteracoes
-                    conta.total_de_linhas_alteradas.append(p.linha_alterada)
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
+
+
+def alteraValoresQuantidades(conta):
+    tabela = Tabela()
+    for linha in tabela.getTabelaValoresQuantidades():
+        numero_da_guia, codigoDeProcedimento, valor, novoValor, quantidade_executada, quantidade_executada_novo = setLinhaAlteracaoDeValoresQuantidades(
+            linha)
+
+        for item in conta.guias_da_conta:
+            guia = Guia(item, codigoDeProcedimento)
+
+            if iselement(guia.getProcedimentosExecutados()):
+                for procedimento in guia.getListaDeProcedimentosExecutados():
+                    p = Procedimento(procedimento, guia)
+                    p.alteraValorUnitarioQuantidades(valor, novoValor, quantidade_executada, quantidade_executada_novo)
+                    conta.qtd_alteracoes += p.qtd_alteracoes
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
+
+            if iselement(guia.getOutrasDespesas()):
+                for procedimento in guia.getListaDeDespesa():
+                    p = Procedimento(procedimento, guia)
+                    p.alteraValorUnitarioQuantidades(valor, novoValor, quantidade_executada, quantidade_executada_novo)
+                    conta.qtd_alteracoes += p.qtd_alteracoes
+                    conta.total_de_linhas_alteradas.append(p.lista_de_alteracoes)
 
 
 interface = Interface()
 interface.janela_principal.mainloop()
+
+# TODO -> Refatorar a classe Procedimento, incluindo atributos na inicialização, como quantidade executada,
+#  valor unitário e afins. Melhorar de alguma forma a lógica de formatação dos dados na classe Tabela. Após melhorias
+#  na classe Tabela, seria possível a redução de código nos metódos de alterações na classe Procedimento. Incluir
+#  funcionalidade para Excluir procedimentos da Guia.'''
+
