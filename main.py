@@ -9,13 +9,13 @@ from pandas import read_excel, DataFrame, ExcelWriter
 
 ans_prefix = {"ans": "http://www.ans.gov.br/padroes/tiss/schemas"}
 
-# Fecha a aplicação se não estiver executando a partir do diretório definido
-# caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
-# caminho_de_execucao = getcwd()
-# if caminho_de_execucao != caminho_diretorio:
-#     mb.showwarning('Erro',
-#                    f'A aplicação só pode ser executada a partir do diretório original:\n{caminho_diretorio}')
-#     exit()
+Fecha a aplicação se não estiver executando a partir do diretório definido
+caminho_diretorio = r"O:\Informatica\Geral\Funcionais\Faturamento de Convênios\Alterador de Guias TISS"
+caminho_de_execucao = getcwd()
+if caminho_de_execucao != caminho_diretorio:
+    mb.showwarning('Erro',
+                   f'A aplicação só pode ser executada a partir do diretório original:\n{caminho_diretorio}')
+    exit()
 
 
 class Conta:
